@@ -56,6 +56,8 @@ class StdioSerial: public Stream {
 
     int peek() override;
 
+    void flush() override; // Force sending of all buffered data
+
   private:
     int outputFd;
     int bufch;
