@@ -7,8 +7,28 @@
 #include <unistd.h>
 #include "StdioSerial.h"
 
+// Set default output when compiling
+#ifndef STDERR_OUTPUT
+#define SERIAL_OUTPUT StdioOutput::STDOUT
+#else 
+#define SERIAL_OUTPUT StdioOutput::STDERR
+#endif
+
+ // Constructor to set the output when an object is instantiated
+StdioSerial::StdioSerial() { setOutput(SERIAL_OUTPUT); }
+
+// Select the output at runtime
+void StdioSerial::setOutput(StdioOutput output) {
+  if (output == StdioOutput::STDOUT) {
+    outputFd = STDOUT_FILENO;
+  } else if (output == StdioOutput::STDERR) {
+    outputFd = STDERR_FILENO;
+  }
+}
+
+// Write to selected output
 size_t StdioSerial::write(uint8_t c) {
-  ssize_t status = ::write(STDOUT_FILENO, &c, 1);
+  ssize_t status = ::write(outputFd, &c, 1);
   return (status <= 0) ? 0 : 1;
 }
 

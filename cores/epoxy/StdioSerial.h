@@ -10,11 +10,22 @@
 #include "Stream.h"
 
 /**
- * A version of Serial that reads from STDIN and sends output to STDOUT on
- * Linux or MacOS.
+ * A version of Serial that reads from STDIN and sends output to STDOUT or
+ * STDERR on Linux or MacOS.
  */
+
+// Class to enumerate the two output options: STDOUT or STDERR
+enum class StdioOutput { 
+  STDOUT, 
+  STDERR 
+};
+
 class StdioSerial: public Stream {
   public:
+    StdioSerial(); // Constructor to set the output when an object is instantiated
+
+    void setOutput(StdioOutput output); // Set the output for write/print methods
+
     void begin(unsigned long /*baud*/) { bufch = -1; }
 
     size_t write(uint8_t c) override;
@@ -38,6 +49,7 @@ class StdioSerial: public Stream {
 
   private:
     int bufch;
+    int outputFd; // Store the selected output 
 };
 
 extern StdioSerial Serial;
