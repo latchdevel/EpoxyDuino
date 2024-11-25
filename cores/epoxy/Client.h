@@ -22,8 +22,6 @@
 #ifndef EPOXY_DUINO_CLIENT_H
 #define EPOXY_DUINO_CLIENT_H
 
-#if defined(EPOXY_CORE_ESP8266)
-
 #include "Print.h"
 #include "Stream.h"
 #include "IPAddress.h"
@@ -44,15 +42,16 @@ class Client: public Stream {
         virtual uint8_t connected() = 0;
         virtual operator bool() = 0;
     protected:
-		/* does not compile
+
         uint8_t* rawIPAddress(IPAddress& addr) {
             return addr.raw_address();
         }
-        const uint8_t* rawIPAddress(const IPAddress& addr) {
+
+        #if defined(EPOXY_CORE_ESP8266)
+        const uint8_t* rawIPAddress(IPAddress& addr) const {
             return addr.raw_address();
         }
-				*/
+        #endif
 };
 
-#endif
 #endif
