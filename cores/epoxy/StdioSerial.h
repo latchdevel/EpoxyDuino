@@ -19,28 +19,21 @@
 #endif
 
 /**
- * A version of Serial that reads from STDIN and sends output to STDOUT on
- * Linux or MacOS.
+ * A version of Serial that reads from STDIN and sends output to STDOUT or
+ * STDERR on Linux or MacOS.
  */
+
+// Class to enumerate the two output options: STDOUT or STDERR
+enum class StdioOutput { 
+  STDOUT, 
+  STDERR 
+};
+
 class StdioSerial: public Stream {
   public:
-    /**
-     * Construct an instance. The default output file descriptor is
-     * STDOUT_FILENO, but STDERR_FILENO is another option. POSIX.1-2017 defines
-     * these values in <unistd.h> (see
-     * https://unix.stackexchange.com/questions/437602), so works under Linux
-     * and MacOS (and assumed to work under FreeBSD, but not explicitly tested).
-     *
-     * The default file descriptor can be overridden by defining the
-     * `SERIAL_OUTPUT_FILENO={n}` macro on the command line when compiling.
-     */
-    StdioSerial(int fd = SERIAL_OUTPUT_FILENO) : outputFd(fd) { }
+    StdioSerial(); // Constructor to set the output when an object is instantiated
 
-    /**
-     * Override the output file descriptor. Two common values are expected to be
-     * STDOUT_FILENO and STDERR_FILENO.
-     */
-    void setOutputFileDescriptor(int fd) { outputFd = fd; }
+    void setOutput(StdioOutput output); // Set the output for write/print methods
 
     void begin(unsigned long /*baud*/) { bufch = -1; }
 
@@ -66,6 +59,7 @@ class StdioSerial: public Stream {
   private:
     int outputFd;
     int bufch;
+    int outputFd; // Store the selected output 
 };
 
 extern StdioSerial Serial;
