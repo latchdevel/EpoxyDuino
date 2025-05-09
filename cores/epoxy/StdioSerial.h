@@ -6,7 +6,15 @@
 #ifndef EPOXY_DUINO_STDIO_SERIAL_H
 #define EPOXY_DUINO_STDIO_SERIAL_H
 
+#if defined(_WIN32)
+#include <Windows.h>
+#define STDOUT_FILENO GetStdHandle(STD_OUTPUT_HANDLE)
+#define STDERR_FILENO GetStdHandle(STD_ERROR_HANDLE)
+typedef HANDLE FileDescriptor;
+#else
 #include <unistd.h> // STDOUT_FILENO
+typedef int FileDescriptor;
+#endif
 #include "Print.h"
 #include "Stream.h"
 
@@ -19,8 +27,8 @@
 #endif
 
 /**
- * A version of Serial that reads from STDIN and sends output to STDOUT on
- * Linux or MacOS.
+ * A version of Serial that reads from STDIN and sends output to STDOUT or
+ * STDERR on Linux, MacOS or Windows.
  */
 class StdioSerial: public Stream {
   public:
@@ -34,13 +42,13 @@ class StdioSerial: public Stream {
      * The default file descriptor can be overridden by defining the
      * `SERIAL_OUTPUT_FILENO={n}` macro on the command line when compiling.
      */
-    StdioSerial(int fd = SERIAL_OUTPUT_FILENO) : outputFd(fd) { }
+    StdioSerial(FileDescriptor fd = SERIAL_OUTPUT_FILENO) : outputFd(fd) { }
 
     /**
      * Override the output file descriptor. Two common values are expected to be
      * STDOUT_FILENO and STDERR_FILENO.
      */
-    void setOutputFileDescriptor(int fd) { outputFd = fd; }
+    void setOutputFileDescriptor(FileDescriptor fd) { outputFd = fd; }
 
     void begin(unsigned long /*baud*/) { bufch = -1; }
 
@@ -64,7 +72,7 @@ class StdioSerial: public Stream {
     int peek() override;
 
   private:
-    int outputFd;
+    FileDescriptor outputFd;
     int bufch;
 };
 
