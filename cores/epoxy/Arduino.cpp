@@ -13,8 +13,25 @@
  */
 
 #include <inttypes.h>
+
+#if defined(_WIN32)
+#include <windows.h>
+void usleep(__int64 usec) {
+  HANDLE timer;
+  LARGE_INTEGER ft;
+
+  ft.QuadPart = -(10 * usec);
+
+  timer = CreateWaitableTimer(NULL, TRUE, NULL);
+  SetWaitableTimer(timer, &ft, 0, NULL, NULL, 0);
+  WaitForSingleObject(timer, INFINITE);
+  CloseHandle(timer);
+}
+#else
 #include <unistd.h> // usleep()
 #include <time.h> // clock_gettime()
+#endif
+
 #include "Arduino.h"
 
 // -----------------------------------------------------------------------
@@ -66,6 +83,28 @@ int analogRead(uint8_t /*pin*/) { return 0; }
 
 void analogWrite(uint8_t /*pin*/, int /*val*/) {}
 
+#if defined(_WIN32)
+unsigned long millis() {
+  LARGE_INTEGER frequency;
+  LARGE_INTEGER counter;
+  
+  QueryPerformanceFrequency(&frequency);
+  QueryPerformanceCounter(&counter);
+  
+  return (counter.QuadPart * 1000) / frequency.QuadPart;
+}
+
+unsigned long micros() {
+  LARGE_INTEGER frequency;
+  LARGE_INTEGER counter;
+  
+  QueryPerformanceFrequency(&frequency);
+  QueryPerformanceCounter(&counter);
+  
+  return (counter.QuadPart * 1000000) / frequency.QuadPart;
+}
+#else
+
 unsigned long millis() {
   struct timespec spec;
   clock_gettime(CLOCK_MONOTONIC, &spec);
@@ -79,6 +118,7 @@ unsigned long micros() {
   unsigned long us = spec.tv_sec * 1000000UL + spec.tv_nsec / 1000U;
   return us;
 }
+#endif
 
 void tone(uint8_t /*_pin*/, unsigned int /*frequency*/, unsigned long /*duration*/) {}
 
