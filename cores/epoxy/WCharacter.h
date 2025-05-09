@@ -23,23 +23,29 @@
 
 #include <ctype.h>
 
-// WCharacter.h prototypes
-inline bool isAlphaNumeric(int c) __attribute__((always_inline));
-inline bool isAlpha(int c) __attribute__((always_inline));
-inline bool isAscii(int c) __attribute__((always_inline));
-inline bool isWhitespace(int c) __attribute__((always_inline));
-inline bool isControl(int c) __attribute__((always_inline));
-inline bool isDigit(int c) __attribute__((always_inline));
-inline bool isGraph(int c) __attribute__((always_inline));
-inline bool isLowerCase(int c) __attribute__((always_inline));
-inline bool isPrintable(int c) __attribute__((always_inline));
-inline bool isPunct(int c) __attribute__((always_inline));
-inline bool isSpace(int c) __attribute__((always_inline));
-inline bool isUpperCase(int c) __attribute__((always_inline));
-inline bool isHexadecimalDigit(int c) __attribute__((always_inline));
-inline int toAscii(int c) __attribute__((always_inline));
-inline int toLowerCase(int c) __attribute__((always_inline));
-inline int toUpperCase(int c)__attribute__((always_inline));
+#if defined(_WIN32)
+#define ALWAYS_INLINE __forceinline
+#else
+#define ALWAYS_INLINE inline __attribute__((always_inline))
+#endif
+
+ // WCharacter.h prototypes
+ALWAYS_INLINE bool isAlphaNumeric(int c);
+ALWAYS_INLINE bool isAlpha(int c);
+ALWAYS_INLINE bool isAscii(int c);
+ALWAYS_INLINE bool isWhitespace(int c);
+ALWAYS_INLINE bool isControl(int c);
+ALWAYS_INLINE bool isDigit(int c);
+ALWAYS_INLINE bool isGraph(int c);
+ALWAYS_INLINE bool isLowerCase(int c);
+ALWAYS_INLINE bool isPrintable(int c);
+ALWAYS_INLINE bool isPunct(int c);
+ALWAYS_INLINE bool isSpace(int c);
+ALWAYS_INLINE bool isUpperCase(int c);
+ALWAYS_INLINE bool isHexadecimalDigit(int c);
+ALWAYS_INLINE int toAscii(int c);
+ALWAYS_INLINE int toLowerCase(int c);
+ALWAYS_INLINE int toUpperCase(int c);
 
 
 // Checks for an alphanumeric character.
