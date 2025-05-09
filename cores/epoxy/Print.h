@@ -92,6 +92,7 @@ class Print
     size_t print(unsigned int, int = DEC);
     size_t print(long, int = DEC);
     size_t print(unsigned long, int = DEC);
+    size_t print(unsigned long long, int = DEC);
     size_t print(double, int = 2);
     size_t print(const Printable&);
 
@@ -104,6 +105,7 @@ class Print
     size_t println(unsigned int, int = DEC);
     size_t println(long, int = DEC);
     size_t println(unsigned long, int = DEC);
+    size_t println(unsigned long long, int = DEC);
     size_t println(double, int = 2);
     size_t println(const Printable&);
     size_t println(void);

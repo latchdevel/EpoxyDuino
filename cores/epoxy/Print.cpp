@@ -110,6 +110,12 @@ size_t Print::print(unsigned long n, int base)
   else return printNumber(n, base);
 }
 
+size_t Print::print(unsigned long long n, int base)
+{
+  if (base == 0) return write(n);
+  else return printNumber((unsigned long) n, base);
+}
+
 size_t Print::print(double n, int digits)
 {
   return printFloat(n, digits);
@@ -186,6 +192,13 @@ size_t Print::println(long num, int base)
 }
 
 size_t Print::println(unsigned long num, int base)
+{
+  size_t n = print(num, base);
+  n += println();
+  return n;
+}
+
+size_t Print::println(unsigned long long num, int base)
 {
   size_t n = print(num, base);
   n += println();
