@@ -10,6 +10,7 @@
 
 #define BUFSIZE (sizeof(int) * 8 + 1)
 
+#if !defined(_WIN32)
 // Copied and modified from https://people.cs.umu.se/isak/snippets/ltoa.c
 // Copyright 1988-90 by Robert B. Stout dba MicroFirm
 // Released to public domain, 1991.
@@ -45,6 +46,7 @@ char *itoa(int n, char *str, int base) {
   memcpy(head, ++tail, i);
   return str;
 }
+#endif
 
 // Copied and modified from https://people.cs.umu.se/isak/snippets/ltoa.c
 // Copyright 1988-90 by Robert B. Stout dba MicroFirm
@@ -73,6 +75,7 @@ char *utoa(unsigned n, char *str, int base) {
   return str;
 }
 
+#if !defined(_WIN32)
 // Copied and modified from https://people.cs.umu.se/isak/snippets/ltoa.c
 // Copyright 1988-90 by Robert B. Stout dba MicroFirm
 // Released to public domain, 1991.
@@ -135,6 +138,7 @@ char *ultoa(unsigned long n, char *str, int base) {
   memcpy(str, ++tail, i);
   return str;
 }
+#endif
 
 // This is a terrible, hacky implementation of dtostrf() but this will never be
 // used in production. It is only used to allow Arduino unit tests using AUnit

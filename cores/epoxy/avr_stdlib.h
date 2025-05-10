@@ -16,10 +16,14 @@
 
 extern "C" {
 
+#if !defined(_WIN32)
 char *itoa(int n, char *str, int base);
+#endif
 char *utoa(unsigned n, char *str, int base);
+#if !defined(_WIN32)
 char *ltoa(long n, char *str, int base);
 char *ultoa(unsigned long n, char *str, int base);
+#endif
 char *dtostrf(double val, signed char width, unsigned char prec, char *s);
 
 }
