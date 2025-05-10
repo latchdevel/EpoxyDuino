@@ -43,6 +43,7 @@ class EspClass
     struct timeval start;
 #if defined(_WIN32)
     void gettimeofday(struct timeval *tv, void* tz) {
+      UNREFERENCED_PARAMETER(tz);
       FILETIME ft;
       unsigned __int64 tmpres = 0;
       static const unsigned __int64 DELTA_EPOCH_IN_MICROSECS = 11644473600000000UL;
