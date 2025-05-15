@@ -100,7 +100,7 @@ void setup(void) {
 
   // Check if 'char' is a signed or unsigned on this system.
   Serial.println(F("Echo test"));
-  char c = (char) 128;
+  char c = (char) (static_cast<unsigned char>(128));
   int i = c;
   if (i < 0) {
     Serial.println(F("'char' is signed."));
