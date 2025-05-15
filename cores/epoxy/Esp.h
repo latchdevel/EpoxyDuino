@@ -3,7 +3,11 @@
 
 #if defined(EPOXY_CORE_ESP8266)
 
+#if defined(_WIN32)
+#include <Windows.h>
+#else
 #include <sys/time.h>
+#endif
 #include "Stream.h"
 
 class EspClass
@@ -37,6 +41,25 @@ class EspClass
 
   private:
     struct timeval start;
+#if defined(_WIN32)
+    void gettimeofday(struct timeval *tv, void* tz) {
+      UNREFERENCED_PARAMETER(tz);
+      FILETIME ft;
+      unsigned __int64 tmpres = 0;
+      static const unsigned __int64 DELTA_EPOCH_IN_MICROSECS = 11644473600000000UL;
+
+      GetSystemTimeAsFileTime(&ft);
+
+      tmpres |= ft.dwHighDateTime;
+      tmpres <<= 32;
+      tmpres |= ft.dwLowDateTime;
+      tmpres /= 1;
+      tmpres -= DELTA_EPOCH_IN_MICROSECS;
+
+      tv->tv_sec = static_cast<long>(tmpres / 1000000UL);
+      tv->tv_usec = static_cast<long>(tmpres % 1000000UL);
+    }
+#endif
 };
 
 class Serial_ : public Stream

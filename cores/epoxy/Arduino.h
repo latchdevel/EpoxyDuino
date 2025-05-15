@@ -193,7 +193,13 @@ using std::round;
 
 extern "C" {
 
+#if defined(_WIN32)
+#undef DELETE
+#undef INADDR_NONE
+#else
 typedef bool boolean;
+#endif
+
 typedef uint8_t byte;
 typedef uint16_t word;
 
