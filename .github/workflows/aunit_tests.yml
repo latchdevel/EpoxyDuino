@@ -13,7 +13,7 @@ name: AUnit Tests
 #     -master
 #   pull_request:
 #
-on: [push]
+on: [push, workflow_dispatch] # Allows you to run this workflow manually from the Actions tab
 
 jobs:
   build:
@@ -21,7 +21,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v6
 
     - name: Setup
       run: |
